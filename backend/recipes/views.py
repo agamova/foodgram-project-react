@@ -6,7 +6,7 @@ from rest_framework import filters, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .filters import RecipeFilter
+from .filters import IngredientFilter, RecipeFilter
 from .mixins import RetrieveListViewSet
 from .models import (Ingredient, Favorite, Recipe, RecipeIngredients,
                      ShoppingCart, Tag)
@@ -25,8 +25,9 @@ FAVORITE_DELETE_ERR_MSG = 'Рецепт не был добавлен в избр
 class IngredientViewSet(RetrieveListViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('name',)
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = IngredientFilter
+    permission_classes = (permissions.AllowAny,)
     pagination_class = None
 
 
@@ -34,17 +35,18 @@ class TagViewSet(RetrieveListViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     pagination_class = None
+    permission_classes = (permissions.AllowAny, )
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializerForWrite()
+    queryset = Recipe.objects.all().order_by('-id')
+    serializer_class = RecipeSerializerForRead
     permission_classes = (IsAuthorOrAdminOrReadOnlyPermission, )
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
 
     def get_serializer_class(self):
-        if self.action == 'list' or self.action == 'retrieve':
+        if self.request.method == 'GET':
             return RecipeSerializerForRead
         return RecipeSerializerForWrite
 

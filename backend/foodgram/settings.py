@@ -1,12 +1,19 @@
 import os
 
+from dotenv import load_dotenv
+
+
+load_dotenv()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = '5pr_xa3k#$%l^49^r*(%(m6^abg8uk9h#(ce4&(7y4s7sl!n#j'
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    default='5pr_xa3k#$%l^49^r*(%(m6^abg8uk9h#(ce4&(7y4s7sl!n#j'
+)
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', default=True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', default=None).split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -55,8 +62,12 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': os.getenv('DB_ENGINE'),
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT')
     }
 }
 
@@ -100,7 +111,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS':
-            'recipes.pagination.CustomPagination',
+        'recipes.pagination.CustomPagination',
 }
 
 DJOSER = {
@@ -110,7 +121,7 @@ DJOSER = {
     },
     'HIDE_USERS': False,
     'PERMISSIONS': {
-        'user': ['rest_framework.permissions.AllowAny'],
+        'user': ['rest_framework.permissions.IsAuthenticated'],
         'user_list': ['rest_framework.permissions.AllowAny'],
     }
 }

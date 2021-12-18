@@ -41,7 +41,7 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         'Картинка',
-        upload_to='recipes/images/',
+        upload_to='recipes/',
     )
     text = models.TextField(
         'Описание'
@@ -56,10 +56,6 @@ class Recipe(models.Model):
     cooking_time = models.PositiveSmallIntegerField(
         'Время приготовления',
         validators=[MinValueValidator(1)],
-    )
-    created_date = models.DateTimeField(
-        'Дата публикации',
-        auto_now_add=True,
     )
 
     def __str__(self):

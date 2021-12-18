@@ -1,6 +1,6 @@
 import django_filters
 
-from .models import Recipe, Tag
+from .models import Ingredient, Recipe, Tag
 
 
 class RecipeFilter(django_filters.FilterSet):
@@ -10,8 +10,8 @@ class RecipeFilter(django_filters.FilterSet):
         to_field_name='slug',
         lookup_expr='exact'
     )
-    is_favorited = django_filters.NumberFilter(method='favorited_filter')
-    is_in_shopping_cart = django_filters.NumberFilter(
+    is_favorited = django_filters.BooleanFilter(method='favorited_filter')
+    is_in_shopping_cart = django_filters.BooleanFilter(
         method='shopping_cart_filter'
     )
 
@@ -28,5 +28,16 @@ class RecipeFilter(django_filters.FilterSet):
     def shopping_cart_filter(self, queryset, name, value):
         user = self.request.user
         if value:
-            return queryset.filter(shopping_cart__user=user)
+            return queryset.filter(shopping_carts__user=user)
         return queryset
+
+
+class IngredientFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(
+        field_name='name',
+        lookup_expr='istartswith'
+    )
+
+    class Meta:
+        model = Ingredient
+        fields = ('name',)

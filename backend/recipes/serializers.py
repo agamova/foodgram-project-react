@@ -28,14 +28,14 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 class RecipeIngredientsSerializerForRead(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(source='ingredient.id')
-    ingredient = serializers.ReadOnlyField(source='ingredient.name')
+    name = serializers.ReadOnlyField(source='ingredient.name')
     measurement_unit = serializers.ReadOnlyField(
         source='ingredient.measurement_unit'
     )
 
     class Meta:
         model = RecipeIngredients
-        fields = ('id', 'ingredient', 'measurement_unit', 'amount')
+        fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
 class RecipeIngredientsSerializerForWrite(serializers.ModelSerializer):
@@ -92,7 +92,7 @@ class RecipeSerializerForWrite(serializers.ModelSerializer):
         queryset=Tag.objects.all(),
         many=True
     )
-    image = Base64ImageField()
+    image = Base64ImageField(max_length=False, use_url=True)
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
@@ -105,12 +105,6 @@ class RecipeSerializerForWrite(serializers.ModelSerializer):
                   'cooking_time',
                   'author'
                   )
-
-    def validate_name(self, name):
-        author = self.context['request'].user
-        if Recipe.objects.filter(name=name, author=author).exists():
-            raise exceptions.ValidationError(RECIPE_NAME_ERR_MSG)
-        return name
 
     def validate_cooking_time(self, cooking_time):
         if cooking_time <= 0:
@@ -128,6 +122,10 @@ class RecipeSerializerForWrite(serializers.ModelSerializer):
     def create(self, validated_data):
         tags_data = validated_data.pop('tags')
         ingredients_data = validated_data.pop('ingredients')
+        author = self.context['request'].user
+        name = validated_data.get('name')
+        if Recipe.objects.filter(name=name, author=author).exists():
+            raise exceptions.ValidationError(RECIPE_NAME_ERR_MSG)
         new_recipe = Recipe.objects.create(**validated_data)
         for tag in tags_data:
             id = tag.id
@@ -145,15 +143,10 @@ class RecipeSerializerForWrite(serializers.ModelSerializer):
         return new_recipe
 
     def update(self, instance, validated_data):
-        instance.author = validated_data.get('author')
-        instance.name = self.initial_data.get('name')
-        if Recipe.objects.filter(
-                name=instance.name,
-                author=instance.author
-        ).exists():
-            raise exceptions.ValidationError(RECIPE_NAME_ERR_MSG)
-        instance.cooking_time = validated_data.get('cooking_time')
-        instance.image = validated_data.get('image')
+        instance.name = self.initial_data.get('name', instance.name)
+        instance.cooking_time = validated_data.get('cooking_time', instance.cooking_time)
+        instance.image = validated_data.get('image', instance.image)
+        instance.text = validated_data.get('text', instance.text)
         tags_data = validated_data.pop('tags')
         ingredients_data = validated_data.pop('ingredients')
         instance.tags.clear()
@@ -170,6 +163,7 @@ class RecipeSerializerForWrite(serializers.ModelSerializer):
                 ingredient_object,
                 through_defaults={'amount': amount}
             )
+        instance.save()
         return instance
 
     def to_representation(self, instance):
