@@ -24,9 +24,14 @@ jobs:
         python -m flake8
 
   build_and_push_to_docker_hub:
-    if: github.ref == 'refs/heads/master'
+    if:
+      contains('
+      refs/heads/master
+      refs/heads/main
+      ', github.ref)
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    needs: tests
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -43,3 +48,42 @@ jobs:
           push: true
           context: backend/
           tags: agamova/foodgram:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build_and_push_to_docker_hub
+    if:
+      contains('
+      refs/heads/master
+      refs/heads/main
+      ', github.ref)
+    steps:
+      - name: executing remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo systemctl stop nginx
+            sudo docker pull agamova/foodgram
+            sudo docker pull agamova/frontend
+            sudo docker-compose stop
+            sudo docker-compose rm web
+            touch .env
+            echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
+            echo DB_NAME=${{ secrets.DB_NAME }} >> .env
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+            echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+            echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+            echo DEBUG=${{ secrets.DEBUG }} >> .env
+            echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> .env
+            echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+            echo ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }} >> .env
+            echo ADMIN_USERNAME=${{ secrets.ADMIN_USERNAME }} >> .env
+            echo ADMIN_FIRST_NAME=${{ secrets.ADMIN_FIRST_NAME }} >> .env
+            echo ADMIN_LAST_NAME=${{ secrets.ADMIN_LAST_NAME }} >> .env
+            echo ADMIN_PASSWORD=${{ secrets.PASSWORD }} >> .env
+            sudo docker-compose up -d
+

@@ -5,12 +5,10 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ../backend/foodgram/.env
+      - ./.env
 
   web:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
+    image: agamova/foodgram:latest
     restart: always
     volumes:
       - static_value:/code/static/
@@ -18,18 +16,19 @@ services:
     command: bash -c "python3 manage.py makemigrations
              && python3 manage.py migrate
              && python3 manage.py collectstatic --noinput
+             && python3 manage.py loader_csv
+             && python3 manage.py superuser_create
              && gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000"
     depends_on:
       - db
     env_file:
-      - ../backend/foodgram/.env
+      - ./.env
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: agamova/frontend:latest
     volumes:
       - ../frontend/:/app/result_build/
+
   nginx:
     image: nginx:1.19.3
     ports:
