@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import exceptions, serializers
+from users.models import Follow, User
+from users.serializers import CustomUserSerializer
 
 from .models import (Ingredient, Favorite, Recipe, RecipeIngredients,
                      ShoppingCart, Tag)
-from users.models import Follow, User
-from users.serializers import CustomUserSerializer
 
 RECIPE_NAME_ERR_MSG = 'Рецепт с таким названием уже опубликован вами'
 RECIPE_COOKING_TIME_ERR_MSG = 'Укажите корректное время приготовления!'
