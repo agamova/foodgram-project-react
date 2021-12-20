@@ -86,4 +86,3 @@ jobs:
             echo ADMIN_LAST_NAME=${{ secrets.ADMIN_LAST_NAME }} >> .env
             echo ADMIN_PASSWORD=${{ secrets.PASSWORD }} >> .env
             sudo docker-compose up -d
-
