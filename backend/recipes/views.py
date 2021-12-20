@@ -81,9 +81,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 recipe_to_delete.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
             return Response(
-                    {'errors': SHOPPING_CART_DELETE_ERR_MSG},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                {'errors': SHOPPING_CART_DELETE_ERR_MSG},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
     @action(detail=True, methods=['get', 'delete'],
             permission_classes=[permissions.IsAuthenticated])

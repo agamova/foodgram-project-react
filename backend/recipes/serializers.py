@@ -169,11 +169,11 @@ class RecipeSerializerForWrite(serializers.ModelSerializer):
         return instance
 
     def to_representation(self, instance):
-        serializer_data = RecipeSerializerForRead(
+        serializer = RecipeSerializerForRead(
             instance,
             context=self.context
-        ).data
-        return serializer_data
+        )
+        return serializer.data
 
 
 class ShortRecipeSerializer(serializers.ModelSerializer):
