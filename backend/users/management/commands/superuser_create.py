@@ -5,6 +5,7 @@ from django.core.management import BaseCommand
 User = get_user_model()
 SUPERUSER = settings.SUPERUSER_ADMIN
 
+
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
