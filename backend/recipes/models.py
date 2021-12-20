@@ -10,6 +10,7 @@ INGREDIENT_AMOUNT_ERR_MSG = 'Количество ингредиента дол�
 COOKING_TIME_ERR_MSG = ('Время приготовления пищи не может быть менее одной '
                         'минуты')
 
+
 class Tag(models.Model):
     name = models.CharField('Название', max_length=25, unique=True)
     color = models.CharField(

@@ -7,7 +7,6 @@ from rest_framework.response import Response
 from .models import Follow, User
 from recipes.serializers import SubscribeUserSerializer
 
-
 SUBSCRIBE_ERR_MSG = 'Нельзя подписаться дважды или на самого себя!'
 UNSUBSCRIBE_ERR_MSG = 'Вы не были подписаны!'
 

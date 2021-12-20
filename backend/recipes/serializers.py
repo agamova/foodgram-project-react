@@ -7,7 +7,6 @@ from .models import (Ingredient, Favorite, Recipe, RecipeIngredients,
 from users.models import Follow, User
 from users.serializers import CustomUserSerializer
 
-
 RECIPE_NAME_ERR_MSG = 'Рецепт с таким названием уже опубликован вами'
 RECIPE_COOKING_TIME_ERR_MSG = 'Укажите корректное время приготовления!'
 RECIPE_INGREDIENTS_ERR_MSG = ('Нельзя указывать один и тот же ингредиент более'
@@ -144,7 +143,10 @@ class RecipeSerializerForWrite(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name = self.initial_data.get('name', instance.name)
-        instance.cooking_time = validated_data.get('cooking_time', instance.cooking_time)
+        instance.cooking_time = validated_data.get(
+            'cooking_time',
+            instance.cooking_time
+        )
         instance.image = validated_data.get('image', instance.image)
         instance.text = validated_data.get('text', instance.text)
         tags_data = validated_data.pop('tags')
@@ -152,13 +154,13 @@ class RecipeSerializerForWrite(serializers.ModelSerializer):
         instance.tags.clear()
         instance.ingredients.clear()
         for tag in tags_data:
-            id = tag.id
-            tag_object = get_object_or_404(Tag, id=id)
+            tag_id = tag.id
+            tag_object = get_object_or_404(Tag, id=tag_id)
             instance.tags.add(tag_object)
         for ingredient in ingredients_data:
-            id = ingredient.get('id')
+            ingredient_id = ingredient.get('id')
             amount = ingredient.get('amount')
-            ingredient_object = get_object_or_404(Ingredient, id=id)
+            ingredient_object = get_object_or_404(Ingredient, id=ingredient_id)
             instance.ingredients.add(
                 ingredient_object,
                 through_defaults={'amount': amount}

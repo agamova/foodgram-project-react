@@ -24,7 +24,15 @@ class RecipeIngredientsAdmin(admin.ModelAdmin):
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     """Represents the model Recipe in admin interface."""
-    list_display = ('id', 'name', 'get_tags', 'get_ingredients', 'text', 'image', 'author', 'cooking_time')
+    list_display = ('id',
+                    'name',
+                    'get_tags',
+                    'get_ingredients',
+                    'text',
+                    'image',
+                    'author',
+                    'cooking_time'
+                    )
 
     def get_tags(self, obj):
         return '\n'.join([str(p) for p in obj.tags.all()])

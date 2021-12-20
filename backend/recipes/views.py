@@ -1,8 +1,7 @@
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
-
-from rest_framework import filters, permissions, status, viewsets
+from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -14,7 +13,6 @@ from .permissions import IsAuthorOrAdminOrReadOnlyPermission
 from .serializers import (IngredientSerializer, RecipeSerializerForRead,
                           RecipeSerializerForWrite, ShortRecipeSerializer,
                           TagSerializer)
-
 
 SHOPPING_CART_ADD_ERR_MSG = 'Рецепт уже добавлен в шопинг-лист'
 SHOPPING_CART_DELETE_ERR_MSG = 'Рецепт не был добавлен в шопинг-лист'
