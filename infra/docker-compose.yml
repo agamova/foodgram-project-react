@@ -39,9 +39,9 @@ services:
       - static_value:/var/html/static/
       - media_value:/var/html/media/
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ../frontend/build:/usr/share/nginx/html/
-      - ../docs:/usr/share/nginx/html/api/docs
-      - ../docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
+      - ./frontend/build:/usr/share/nginx/html/
+      - ./docs:/usr/share/nginx/html/api/docs
+      - ./docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
 
     depends_on:
       - web
