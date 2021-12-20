@@ -6,6 +6,9 @@ from .validators import is_convertible_to_color
 
 User = get_user_model()
 
+INGREDIENT_AMOUNT_ERR_MSG = 'Количество ингредиента должно быть больше нуля.'
+COOKING_TIME_ERR_MSG = ('Время приготовления пищи не может быть менее одной '
+                        'минуты')
 
 class Tag(models.Model):
     name = models.CharField('Название', max_length=25, unique=True)
@@ -55,7 +58,7 @@ class Recipe(models.Model):
     )
     cooking_time = models.PositiveSmallIntegerField(
         'Время приготовления',
-        validators=[MinValueValidator(1)],
+        validators=[MinValueValidator(1, message=COOKING_TIME_ERR_MSG)],
     )
 
     def __str__(self):
@@ -71,14 +74,14 @@ class RecipeIngredients(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     amount = models.FloatField(
         'Количество ингредиента',
-        validators=[MinValueValidator(0)]
+        validators=[MinValueValidator(0, message=INGREDIENT_AMOUNT_ERR_MSG)]
     )
 
     class Meta:
-        constraints = [models.UniqueConstraint(
-            fields=['recipe', 'ingredient'],
+        constraints = (models.UniqueConstraint(
+            fields=('recipe', 'ingredient'),
             name='unique_ingredient_in_recipe'
-        )]
+        ))
 
     def __str__(self):
         return (f'В {self.recipe} ингредиент {self.ingredient} в кол-ве '

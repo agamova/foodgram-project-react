@@ -51,6 +51,3 @@ class CustomUserViewSet(UserViewSet):
             follow = Follow.objects.get(user=user, following=following)
             follow.delete()
             return Response(status=204)
-
-
-

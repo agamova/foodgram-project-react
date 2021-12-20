@@ -20,10 +20,10 @@ class Follow(models.Model):
         related_name='following')
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['user', 'following'],
+        constraints = (
+            models.UniqueConstraint(fields=('user', 'following'),
                                     name='already subscribed'),
-        ]
+        )
 
     def __str__(self):
         return f'{self.user.username} followed {self.following.username}'
