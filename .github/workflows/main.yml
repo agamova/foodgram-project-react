@@ -80,9 +80,4 @@ jobs:
             echo DEBUG=${{ secrets.DEBUG }} >> .env
             echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> .env
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
-            echo ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }} >> .env
-            echo ADMIN_USERNAME=${{ secrets.ADMIN_USERNAME }} >> .env
-            echo ADMIN_FIRST_NAME=${{ secrets.ADMIN_FIRST_NAME }} >> .env
-            echo ADMIN_LAST_NAME=${{ secrets.ADMIN_LAST_NAME }} >> .env
-            echo ADMIN_PASSWORD=${{ secrets.PASSWORD }} >> .env
             sudo docker-compose up -d

@@ -126,10 +126,3 @@ DJOSER = {
 }
 
 AUTH_USER_MODEL = 'users.User'
-SUPERUSER_ADMIN = {
-    'email': os.getenv('ADMIN_EMAIL'),
-    'username': os.getenv('ADMIN_USERNAME'),
-    'first_name': os.getenv('ADMIN_FIRST_NAME'),
-    'last_name': os.getenv('ADMIN_LAST_NAME'),
-    'password': os.getenv('ADMIN_PASSWORD')
-}
