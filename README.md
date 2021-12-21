@@ -49,6 +49,6 @@ sudo docker-compose exec web python manage.py createsuperuser
 
 
 
-Проект доступен по адресу foodgram.agamova.ru
+Проект доступен по адресу http://foodgram.agamova.ru
 Тестовый юзер: evgenia@agamova.ru
 Пароль: foodgram123456
