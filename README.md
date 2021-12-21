@@ -1,5 +1,5 @@
 
-[foodgram](https://github.com/agamova/foodgram-project-react/workflows/main.yaml/badge.svg)
+![foodgram_project_react_workflow](https://github.com/agamova/foodgram-project-react/workflows/main.yaml/badge.svg)
 
 # Foodgram - продуктовый помощник.
 
@@ -26,12 +26,14 @@ infra/nginx.conf и infra/docker-compose.yml в корневую директо�
 sudo docker-compose up -d --build
 ```
 После успешного запуска на сервере выполните команды (только после первого деплоя):
-
 ```
-sudo docker-compose exec web python manage.py collectstatic
+sudo docker-compose exec web python manage.py makemigrations
 ```
 ```
 sudo docker-compose exec web python manage.py migrate
+```
+```
+sudo docker-compose exec web python manage.py collectstatic
 ```
 ```
 sudo docker-compose exec web python manage.py loader_csv
@@ -39,3 +41,14 @@ sudo docker-compose exec web python manage.py loader_csv
 ```
 sudo docker-compose exec web python manage.py createsuperuser
 ```
+
+В данном проекте настроен workflow, итогом работы которого будет автоматическая
+проверка на соответствие PEP8, пуш образов на докерхаб, деплой на сервер, а 
+так же сборка и запуск в docker-контейнере. Для использования workflow, укажите
+в SECRETS все использующиеся в нем переменные.
+
+
+
+Проект доступен по адресу foodgram.agamova.ru
+Тестовый юзер: evgenia@agamova.ru
+Пароль: foodgram123456
