@@ -82,7 +82,8 @@ class RecipeIngredients(models.Model):
         constraints = (models.UniqueConstraint(
             fields=('recipe', 'ingredient'),
             name='unique_ingredient_in_recipe'
-        ))
+        ),
+        )
 
     def __str__(self):
         return (f'В {self.recipe} ингредиент {self.ingredient} в кол-ве '
