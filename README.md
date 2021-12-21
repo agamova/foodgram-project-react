@@ -1,5 +1,5 @@
 
-![foodgram_project_react_workflow](https://github.com/agamova/foodgram-project-react/workflows/main.yaml/badge.svg)
+![foodgram-project-react_workflow](https://github.com/agamova/foodgram-project-react/workflows/foodgram_workflow/badge.svg)
 
 # Foodgram - продуктовый помощник.
 
