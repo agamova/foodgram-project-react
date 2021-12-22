@@ -155,10 +155,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         p.drawString(30, 735, 'SHOPPING LIST')
         p.line(480, 747, 580, 747)
         n = 725
+        string = f'{key}({value["measurement_unit"]}) - {value["amount"]}'
         for key, value in ingredients_objects.items():
-            p.drawString(275,
-                         n,
-                         f'{key}({value["measurement_unit"]}) - {value["amount"]}')
+            p.drawString(275, n, string.format(key=key, value=value))
             n -= 10
         p.line(378, 723, 580, 723)
 
