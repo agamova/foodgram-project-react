@@ -144,10 +144,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
         for key, value in ingredients_objects.items():
             shopping_list += (f'{key}({value["measurement_unit"]}) - '
                               f'{value["amount"]}\n')
-        response = HttpResponse(shopping_list, content_type='application/pdf')
+        response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = ('attachment; '
                                            'filename=shopping_list.pdf')
-        p = canvas.Canvas(response, pagesize=letter)
+        p = canvas.Canvas(pagesize=letter)
+        p.drawText(shopping_list)
         p.showPage()
         p.save()
         return response
