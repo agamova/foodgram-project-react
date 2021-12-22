@@ -142,7 +142,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         for key, value in ingredients_objects.items():
             shopping_list += (f'{key}({value["measurement_unit"]}) - '
                               f'{value["amount"]}\n')
-        response = HttpResponse(shopping_list, 'Content-Type: text/plain')
+        response = HttpResponse(shopping_list, 'Content-Type: application/pdf')
         response['Content-Disposition'] = ('attachment; '
-                                           'filename=shopping_list.txt')
+                                           'filename=shopping_list.pdf')
         return response
