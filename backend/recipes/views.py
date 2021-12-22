@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -146,8 +147,22 @@ class RecipeViewSet(viewsets.ModelViewSet):
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = ('attachment; '
                                            'filename=shopping_list.pdf')
-        p = canvas.Canvas(response)
-        p.drawString(10, 10, shopping_list.encode('utf-8'))
+        p = canvas.Canvas(response, pagesize=letter)
+        p.setLineWidth(.3)
+        p.setFont('Helvetica', 12)
+
+        p.drawString(30, 750, 'FOODGRAM')
+        p.drawString(30, 735, 'SHOPPING LIST')
+        p.line(480, 747, 580, 747)
+        n = 725
+        for key, value in ingredients_objects.items():
+            p.drawString(275,
+                         n,
+                         f'{key}({value["measurement_unit"]}) - {value["amount"]}')
+            n -= 10
+        p.line(378, 723, 580, 723)
+
+        canvas.line(120, 700, 580, 700)
         p.showPage()
         p.save()
         return response
