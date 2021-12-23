@@ -150,17 +150,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
         buffer = io.BytesIO()
         pdfmetrics.registerFont(TTFont('DejaVuSerif', 'DejaVuSerif.ttf'))
         p = canvas.Canvas(buffer)
-        p.setFont('DejaVuSerif', 14)
+        p.setFont('DejaVuSerif', 18)
         p.drawString(100, 800, 'Список покупок:')
-        n = 700
+        n = 750
         i = 1
+        p.setFont('DejaVuSerif', 14)
         for key, value in ingredients_objects.items():
             p.drawString(
                 100,
                 n,
                 f'{i}. {key}({value["measurement_unit"]}) - {value["amount"]}'
             )
-            n -= 10
+            n -= 20
             i += 1
 
         p.showPage()
