@@ -57,10 +57,7 @@ class Recipe(models.Model):
         Ingredient,
         through='RecipeIngredients'
     )
-    cooking_time = models.PositiveSmallIntegerField(
-        'Время приготовления',
-        validators=[MinValueValidator(1, message=COOKING_TIME_ERR_MSG)],
-    )
+    cooking_time = models.PositiveSmallIntegerField('Время приготовления',)
 
     def __str__(self):
         return f'{self.name} от  {self.author}'
