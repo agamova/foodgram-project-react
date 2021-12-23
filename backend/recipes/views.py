@@ -164,7 +164,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
             n -= 20
             i += 1
 
+        p.drawText(shopping_list)
+
         p.showPage()
         p.save()
         buffer.seek(0)
-        return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+        return FileResponse(
+            buffer,
+            as_attachment=True,
+            filename='shopping_list.pdf'
+        )
