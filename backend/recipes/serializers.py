@@ -114,7 +114,7 @@ class RecipeSerializerForWrite(serializers.ModelSerializer):
         set_of_ingredients_id = set()
         for ingredient in ingredients:
             if ingredient['id'] in set_of_ingredients_id:
-                raise exceptions.ValidationError()
+                raise exceptions.ValidationError(RECIPE_INGREDIENTS_ERR_MSG)
             set_of_ingredients_id.add(ingredient['id'])
         return ingredients
 

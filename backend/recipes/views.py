@@ -161,7 +161,7 @@ def ingredients_to_pdf(ingredients_dict):
     p = canvas.Canvas(buffer)
     p.setFont('DejaVuSerif', 18)
     p.drawString(100, 800, 'Список покупок:')
-    p.line(100, 770, 500, 770)
+    p.line(100, 785, 500, 785)
     n = 750
     i = 1
     p.setFont('DejaVuSerif', 14)
