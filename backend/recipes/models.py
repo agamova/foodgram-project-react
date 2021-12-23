@@ -1,15 +1,9 @@
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator
 from django.db import models
-from django.utils.translation import gettext as _
 
 from .validators import is_convertible_to_color
 
 User = get_user_model()
-
-INGREDIENT_AMOUNT_ERR_MSG = 'Количество ингредиента должно быть больше нуля.'
-COOKING_TIME_ERR_MSG = ('Время приготовления пищи не может быть менее одной '
-                        'минуты.')
 
 
 class Tag(models.Model):
@@ -58,13 +52,7 @@ class Recipe(models.Model):
         Ingredient,
         through='RecipeIngredients'
     )
-    cooking_time = models.IntegerField(
-        'Время приготовления',
-        validators=[
-            MinValueValidator(1, message=_(COOKING_TIME_ERR_MSG)),
-
-        ]
-    )
+    cooking_time = models.IntegerField('Время приготовления',)
 
     def __str__(self):
         return f'{self.name} от  {self.author}'
@@ -77,15 +65,7 @@ class RecipeIngredients(models.Model):
         related_name='recipe_ingredients'
     )
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    amount = models.FloatField(
-        'Количество ингредиента',
-        validators=[MinValueValidator(
-            0,
-            message=_(INGREDIENT_AMOUNT_ERR_MSG
-                      )
-        ),
-        ]
-    )
+    amount = models.FloatField('Количество ингредиента',)
 
     class Meta:
         constraints = (models.UniqueConstraint(

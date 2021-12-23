@@ -11,6 +11,7 @@ RECIPE_NAME_ERR_MSG = 'Рецепт с таким названием уже оп
 RECIPE_COOKING_TIME_ERR_MSG = 'Укажите корректное время приготовления!'
 RECIPE_INGREDIENTS_ERR_MSG = ('Нельзя указывать один и тот же ингредиент более'
                               ' одного раза')
+INGREDIENT_AMOUNT_ERR_MSG = 'Количество ингредиента должно быть больше нуля.'
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -116,6 +117,8 @@ class RecipeSerializerForWrite(serializers.ModelSerializer):
             if ingredient['id'] in set_of_ingredients_id:
                 raise exceptions.ValidationError(RECIPE_INGREDIENTS_ERR_MSG)
             set_of_ingredients_id.add(ingredient['id'])
+            if ingredient['amount'] <= 0:
+                raise exceptions.ValidationError(INGREDIENT_AMOUNT_ERR_MSG)
         return ingredients
 
     def create(self, validated_data):
