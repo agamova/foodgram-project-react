@@ -147,6 +147,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
                               f'{value["amount"]}\n')
         buffer = io.BytesIO()
         p = canvas.Canvas(buffer)
+        n = 700
+        for key, value in ingredients_objects.items():
+            p.drawString(100, n, f'{key}({value["measurement_unit"]})')
+            n -= 10
         p.drawString(100, 100, "Hello world.")
         p.showPage()
         p.save()
