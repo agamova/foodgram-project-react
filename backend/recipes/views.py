@@ -1,6 +1,8 @@
 import io
 
 from django.http import FileResponse
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
@@ -146,7 +148,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
             shopping_list += (f'{key}({value["measurement_unit"]}) - '
                               f'{value["amount"]}\n')
         buffer = io.BytesIO()
+        pdfmetrics.registerFont(TTFont('DejaVuSerif', 'DejaVuSerif.ttf'))
         p = canvas.Canvas(buffer)
+        p.setFont('DejaVuSerif', 14)
         n = 700
         for key, value in ingredients_objects.items():
             p.drawString(100, n, f'{key}({value["measurement_unit"]})')
