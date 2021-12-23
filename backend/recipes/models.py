@@ -61,7 +61,7 @@ class Recipe(models.Model):
     cooking_time = models.IntegerField(
         'Время приготовления',
         validators=[
-            MinValueValidator(code=1, message=_(COOKING_TIME_ERR_MSG)),
+            MinValueValidator(1, message=_(COOKING_TIME_ERR_MSG)),
 
         ]
     )
@@ -80,7 +80,7 @@ class RecipeIngredients(models.Model):
     amount = models.FloatField(
         'Количество ингредиента',
         validators=[MinValueValidator(
-            code=0,
+            0,
             message=_(INGREDIENT_AMOUNT_ERR_MSG
                       )
         ),
