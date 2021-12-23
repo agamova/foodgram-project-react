@@ -147,30 +147,33 @@ class RecipeViewSet(viewsets.ModelViewSet):
         for key, value in ingredients_objects.items():
             shopping_list += (f'{key}({value["measurement_unit"]}) - '
                               f'{value["amount"]}\n')
-        buffer = io.BytesIO()
-        pdfmetrics.registerFont(TTFont('DejaVuSerif', 'DejaVuSerif.ttf'))
-        p = canvas.Canvas(buffer)
-        p.setFont('DejaVuSerif', 18)
-        p.drawString(100, 800, 'Список покупок:')
-        n = 750
-        i = 1
-        p.setFont('DejaVuSerif', 14)
-        for key, value in ingredients_objects.items():
-            p.drawString(
-                100,
-                n,
-                f'{i}. {key}({value["measurement_unit"]}) - {value["amount"]}'
-            )
-            n -= 20
-            i += 1
-
-        p.drawText(shopping_list)
-
-        p.showPage()
-        p.save()
-        buffer.seek(0)
+        shopping_list = ingredients_to_pdf(ingredients_objects)
         return FileResponse(
-            buffer,
+            shopping_list,
             as_attachment=True,
             filename='shopping_list.pdf'
         )
+
+
+def ingredients_to_pdf(ingredients_dict):
+    buffer = io.BytesIO()
+    pdfmetrics.registerFont(TTFont('DejaVuSerif', 'DejaVuSerif.ttf'))
+    p = canvas.Canvas(buffer)
+    p.setFont('DejaVuSerif', 18)
+    p.drawString(100, 800, 'Список покупок:')
+    p.line(100, 770, 500, 770)
+    n = 750
+    i = 1
+    p.setFont('DejaVuSerif', 14)
+    for key, value in ingredients_dict.items():
+        p.drawString(
+            100,
+            n,
+            f'{i}. {key}({value["measurement_unit"]}) - {value["amount"]}'
+        )
+        n -= 20
+        i += 1
+    p.showPage()
+    p.save()
+    buffer.seek(0)
+    return buffer
