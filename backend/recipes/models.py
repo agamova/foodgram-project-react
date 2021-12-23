@@ -8,7 +8,7 @@ User = get_user_model()
 
 INGREDIENT_AMOUNT_ERR_MSG = 'Количество ингредиента должно быть больше нуля.'
 COOKING_TIME_ERR_MSG = ('Время приготовления пищи не может быть менее одной '
-                        'минуты')
+                        'минуты.')
 
 
 class Tag(models.Model):
